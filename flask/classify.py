@@ -2,11 +2,14 @@ from lyricsgenius import Genius
 import cohere
 from cohere.classify import Example
 from collections import defaultdict
-import json
 from flask import jsonify
+from dotenv import load_dotenv
+import os
 
-genius_access_token = 'Wp4J436QAPoKd2jDRKqePrhWUc7GM1aC17SlR-ZfsyH89AfznUJyON2k0hILGML9'
-key = 'jH0nWBzYxGqXcBFXAXlVdh7jVicvjW7rPbbYPFn8'
+load_dotenv()
+
+genius_access_token = os.getenv('GENIUS_TOKEN')
+key = os.getenv('COHERE_KEY')
 
 co = cohere.Client(key)
 genius = Genius(genius_access_token)
