@@ -1,19 +1,31 @@
 import React from "react";
+import '../styles/Song.css'
 
 interface SongProps {
     selectedImg: string;
     selectedTitle: string;
     selectedAuthor: string;
+    selectedAudioLink: string;
 }
 
-const Song: React.FC <SongProps> = ({ selectedImg, selectedTitle, selectedAuthor }) => {
+function onPlay() {
+
+}
+
+function onPause() {
+
+}
 
 
+const Song: React.FC <SongProps> = ({ selectedImg, selectedTitle, selectedAuthor, selectedAudioLink }) => {
     return (
-        <div className="song">
-             <h1>hi</h1>
+        <div className="song-item">
+            <img id="resize" src={selectedImg}/>
+            <div className="text">
+                <div className="title">{selectedTitle}</div>
+                <div className="artist">By: {selectedAuthor}</div>
+            </div>
         </div>
-       
     )
 }
 

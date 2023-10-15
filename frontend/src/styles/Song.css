@@ -1,0 +1,19 @@
+.song-item {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    margin: 1em 0;
+}
+
+.song-item img {
+    width: 100px;
+}
+
+.text .title {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.text .artist {
+    font-size: 1.15em;
+}

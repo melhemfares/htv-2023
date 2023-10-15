@@ -60,12 +60,22 @@ router.get('/playlist', async (req, res) => {
         return res.status(400).send({error: 'Please provide a playlist Id!'})
     } try {
         const playlistTracks = await getPlaylistTracks(playlistId);
+        let songs = []
         for (track in playlistTracks['tracks']['items']){
             let artist = playlistTracks['tracks']['items'][track]['track']['artists'][0]['name']
             let title = playlistTracks['tracks']['items'][track]['track']['name']
-            console.log(artist, title);
+            let images = playlistTracks['tracks']['items'][track]['track']['album']['images'][0]['url']
+            let preview = playlistTracks['tracks']['items'][track]['track']['preview_url']
+            songs.push(
+                {
+                    'artist': artist, 
+                    'title': title, 
+                    'images': images, 
+                    'preview': preview
+                }
+            );
         }
-        res.status(200).send({ playlistTracks })
+        res.status(200).send({ songs })
     } catch (err) {
         res.status(500).send({error: err})
     }

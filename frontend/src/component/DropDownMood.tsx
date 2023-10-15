@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/DropdownMood.css'
 
 interface MoodDropdownProps {
   selectedMood: string;
@@ -13,7 +14,7 @@ const MoodDropdown: React.FC<MoodDropdownProps> = ({ selectedMood, onMoodChange 
   };
 
   return (
-    <div>
+    <div className="moodmenu">
       <label htmlFor="mood">Select Mood:</label>
       <select id="mood" value={selectedMood} onChange={handleMoodChange}>
         {moodOptions.map((mood) => (
