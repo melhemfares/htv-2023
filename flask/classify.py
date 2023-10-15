@@ -15,6 +15,15 @@ key = os.getenv('COHERE_KEY')
 
 co = cohere.Client(key)
 genius = Genius(genius_access_token)
+
+examples = []
+
+with open('songs.json', 'r') as file:
+    songs = json.load(file)
+
+for mood, lyrics in songs.items():
+    for lyric in lyrics:
+        examples.append(Example(lyric, mood))
     
 def classify_one(title, author):
     
@@ -33,15 +42,6 @@ def classify_one(title, author):
     for ly in lyrics:
         if ly != '':
             inputs.append(ly)
-            
-    examples = []
-
-    with open('songs.json', 'r') as file:
-        songs = json.load(file)
-
-    for mood, lyrics in songs.items():
-        for lyric in lyrics:
-            examples.append(Example(lyric, mood))
 
     count = defaultdict(int)
 
@@ -68,7 +68,7 @@ def classify_many(songs):
     
     for song in songs['songs']:
         title, author = song['title'], song['author']
-
+        # print("VALUES", title, author, mood)
         res.append(classify_one(title, author))
 
     new = []
