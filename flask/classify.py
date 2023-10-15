@@ -39,9 +39,12 @@ def classify_one(title, author):
     lyrics = song.lyrics.split('\n')
     inputs = []
 
+    i = 0
+
     for ly in lyrics:
-        if ly != '':
+        if ly != '' and i < 96:
             inputs.append(ly)
+            i += 1
 
     count = defaultdict(int)
 
