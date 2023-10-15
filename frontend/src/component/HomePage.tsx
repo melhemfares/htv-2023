@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
   const [playlistID, setPlaylistID] = useState('3M1BqU7ZmQJ6L6zLvaK5o6');
   const [selectedMood, setSelectedMood] = useState('Happy');
   const [songs, setSongs] = useState<SongType[]>([]); // Add state to store the songs
-
+  const store: Dictionary<string, SongType> = new Dictionary
   const handlePlaylistIDChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaylistID(e.target.value);
   };
@@ -58,6 +58,7 @@ const HomePage: React.FC = () => {
               'songs': [],
             }
 
+            
             jsonData.songs.map((song : SongType) => {
               const temp = {
                 'author': song.artist,
@@ -66,8 +67,17 @@ const HomePage: React.FC = () => {
               requestBody['songs'].push(temp);
             });
 
-            const getTopSongs = await fetch(`127.0.0.1:5000/classify/many/`);
-        }
+            const getTopSongs = await fetch(`127.0.0.1:5000/classify/many/`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(requestBody)
+            });
+        
+        
+        
+          }
         
         
         // console.log(data);

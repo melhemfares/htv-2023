@@ -18,7 +18,7 @@ genius = Genius(genius_access_token)
 
 examples = []
 
-with open('songs.json', 'r') as file:
+with open('C:/Users/ricki/OneDrive/Desktop/htv-2023/flask/songs.json', 'r') as file:
     songs = json.load(file)
 
 for mood, lyrics in songs.items():
@@ -68,7 +68,7 @@ def classify_many(songs):
     
     for song in songs['songs']:
         title, author = song['title'], song['author']
-        # print("VALUES", title, author, mood)
+        print("VALUES", title, author, mood)
         res.append(classify_one(title, author))
 
     new = []
@@ -78,7 +78,7 @@ def classify_many(songs):
             new.append((song['title'], song['author'], song['mood'][1]))
 
     new.sort(key=lambda x: x[2], reverse=True)
-
+    print("HERE", jsonify(new))
     return jsonify(new)
 
 
