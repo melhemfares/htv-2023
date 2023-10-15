@@ -41,7 +41,7 @@ const Song: React.FC<SongProps> = ({ selectedImg, selectedTitle, selectedAuthor,
                 <div className="title">{selectedTitle}</div>
                 <div className="artist">By: {selectedAuthor}</div>
             </div>
-            <audio ref={audioRef} src={selectedAudioLink}></audio>
+            {selectedAudioLink &&   <audio ref={audioRef} src={selectedAudioLink}></audio>}
         </div>
     );
 }

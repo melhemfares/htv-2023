@@ -50,7 +50,7 @@ def classify_one(title, author):
 
     response = co.classify(
     inputs=inputs,
-    examples=examples,
+     examples=examples,
     )
 
     balancer = len(inputs)
@@ -75,7 +75,8 @@ def classify_many(songs):
         res.append(classify_one(title, author))
 
     new = []
-
+    for key in res:
+        print()
     for song in res:
         if song['mood'][0] == mood:
             new.append((song['title'], song['author'], song['mood'][1]))

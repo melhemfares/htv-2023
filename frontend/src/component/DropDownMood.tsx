@@ -7,7 +7,7 @@ interface MoodDropdownProps {
 }
 
 const MoodDropdown: React.FC<MoodDropdownProps> = ({ selectedMood, onMoodChange }) => {
-  const moodOptions = ['Happy', 'Sad', 'Calm', 'Energetic', 'Relaxed'];
+  const moodOptions = ['Happy', 'Sad', 'Love', 'Excited'];
 
   const handleMoodChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onMoodChange(e.target.value);
