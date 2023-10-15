@@ -29,7 +29,17 @@ async function getSongsByGenre(genre) {
     return response.data.tracks;
 }
 
-router.get('/', async (req, res) => {
+async function getPlaylistTracks(playlistId){
+    const accessToken = await getAccessToken();
+    const response = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+        headers: {
+            'Authorization': `Bearer ${accessToken}`
+        }
+    });
+    return response.data;
+}
+
+router.get('/genre', async (req, res) => {
     const genre = req.query.genre;
     
     if (!genre) {
@@ -39,7 +49,25 @@ router.get('/', async (req, res) => {
         const songs = await getSongsByGenre(genre);
         res.status(200).send({ songs });
     } catch (err) {
-        res.status(500).send({ error: 'Internal fetch error occurred.'})
+        res.status(500).send({ error: err })
+    }
+});
+
+router.get('/playlist', async (req, res) => {
+    const playlistId = req.query.id;
+
+    if (!playlistId){
+        return res.status(400).send({error: 'Please provide a playlist Id!'})
+    } try {
+        const playlistTracks = await getPlaylistTracks(playlistId);
+        for (track in playlistTracks['tracks']['items']){
+            let artist = playlistTracks['tracks']['items'][track]['track']['artists'][0]['name']
+            let title = playlistTracks['tracks']['items'][track]['track']['name']
+            console.log(artist, title);
+        }
+        res.status(200).send({ playlistTracks })
+    } catch (err) {
+        res.status(500).send({error: err})
     }
 });
 
