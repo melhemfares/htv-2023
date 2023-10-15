@@ -15,7 +15,7 @@ app.app_context().push()
 def hello_world():
     return 'Hello, World!'
 
-@app.route('/classify', methods=['GET'])
+@app.route('/classify', methods=['POST'])
 def test_classify():
     song = request.get_json()
 
@@ -23,7 +23,7 @@ def test_classify():
 
     return classify_one(title, author)
 
-@app.route('/classify/many', methods=['GET'])
+@app.route('/classify/many', methods=['POST'])
 def classify_more():
     songs = request.get_json()
 
