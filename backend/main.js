@@ -11,7 +11,14 @@ const app = express();
 const port = process.env.PORT || 3000; // Use the provided port or 3000 as a default
 
 // Middleware to allow us to parse JSON
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:3001',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Allow session cookies to be sent with requests.
+  optionsSuccessStatus: 204
+}
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Define a route for the root URL

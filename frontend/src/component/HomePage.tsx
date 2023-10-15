@@ -7,8 +7,8 @@ import '../styles/HomePage.css'
 interface SongType {
   artist: string;
   title: string;
-  images: string;
-  preview: string;
+  images?: string;
+  preview?: string;
 };
 
 interface Temp {
@@ -18,9 +18,9 @@ interface Temp {
 
 const HomePage: React.FC = () => {
   const [playlistID, setPlaylistID] = useState('3M1BqU7ZmQJ6L6zLvaK5o6');
-  const [selectedMood, setSelectedMood] = useState('Happy');
-  const [songs, setSongs] = useState<SongType[]>([]); // Add state to store the songs
-  const store: Dictionary<string, SongType> = new Dictionary
+  const [selectedMood, setSelectedMood] = useState('Sad');
+  const [songs, setSongs] = useState([]); // Add state to store the songs
+  const store: Map<string, SongType> = new Map<string,SongType >();
   const handlePlaylistIDChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaylistID(e.target.value);
   };
@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
         if (!response.body) {
           throw new Error('Network response was not ok');
         }
-
+        console.log(response)
         const reader = response.body.getReader();
         while (true) {
             const { done, value } = await reader.read();
@@ -51,7 +51,7 @@ const HomePage: React.FC = () => {
             const text = decoder.decode(value);
             const jsonData = JSON.parse(text);
             console.log(jsonData);
-            setSongs(jsonData.songs);
+            
             
             const requestBody: { mood: string; songs: Temp[] } = {
               'mood': selectedMood,
@@ -60,6 +60,7 @@ const HomePage: React.FC = () => {
 
             
             jsonData.songs.map((song : SongType) => {
+              store.set(`${song.artist}-${song.title}`, song)
               const temp = {
                 'author': song.artist,
                 'title': song.title,
@@ -67,23 +68,25 @@ const HomePage: React.FC = () => {
               requestBody['songs'].push(temp);
             });
 
-            const getTopSongs = await fetch(`127.0.0.1:5000/classify/many/`, {
+            const getTopSongs = await fetch(`http://127.0.0.1:5000/classify/many/`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify(requestBody)
             });
-        
-        
-        
+
+            const data = await getTopSongs.json();
+            for(var old of jsonData.songs) {
+              for(var newD of data) {
+                if (old['artist'] == newD[1] && old['title'] == newD[0]) {
+                  newD.push(old['images'])
+                  newD.push(old['preview'])
+                }
+              }
+            }
+            setSongs(data);
           }
-        
-        
-        // console.log(data);
-        // Update the songs state with the received data
-        // setSongs(data);
-        
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -121,10 +124,10 @@ const HomePage: React.FC = () => {
             <div className='song-list'>
             {songs.map((song) => (
               <Song
-                selectedAuthor={song.artist}
-                selectedTitle={song.title}
-                selectedImg={song.images}
-                selectedAudioLink={song.preview}
+                selectedAuthor={song[1]}
+                selectedTitle={song[0]}
+                selectedImg={song[3]}
+                selectedAudioLink={song[4]}
               />
             ))}
             </div>

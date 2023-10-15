@@ -1,6 +1,9 @@
 const axios = require('axios');
-const router = require('express').Router();
-
+const express = require('express');
+const router = express.Router();
+const cors = require('cors');
+const app = express();
+app.use(cors());
 require('dotenv').config({ path: '../.env' });
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
@@ -29,7 +32,7 @@ async function getSongsByGenre(genre) {
     return response.data.tracks;
 }
 
-async function getPlaylistTracks(playlistId){
+async function getPlaylistTracks(playlistId){   
     const accessToken = await getAccessToken();
     const response = await axios.get(`https://api.spotify.com/v1/playlists/${playlistId}`, {
         headers: {

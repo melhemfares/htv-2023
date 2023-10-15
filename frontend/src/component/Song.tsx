@@ -1,33 +1,49 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import '../styles/Song.css'
 
 interface SongProps {
-    selectedImg: string;
+    selectedImg: string | undefined;
     selectedTitle: string;
     selectedAuthor: string;
-    selectedAudioLink: string;
+    selectedAudioLink: string | undefined;
 }
 
-function onPlay() {
+const Song: React.FC<SongProps> = ({ selectedImg, selectedTitle, selectedAuthor, selectedAudioLink }) => {
+    const [isPlaying, setIsPlaying] = useState(false);  // State to track if audio is playing
+    const audioRef = useRef<HTMLAudioElement | null>(null);  // Reference to the audio element
 
-}
+    function onPlay() {
+        if (audioRef.current) {
+            audioRef.current.play();
+            setIsPlaying(true);
+        }
+    }
 
-function onPause() {
+    function onPause() {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            setIsPlaying(false);
+        }
+    }
 
-}
+    function handleImageClick() {
+        if (isPlaying) {
+            onPause();
+        } else {
+            onPlay();
+        }
+    }
 
-
-const Song: React.FC <SongProps> = ({ selectedImg, selectedTitle, selectedAuthor, selectedAudioLink }) => {
     return (
         <div className="song-item">
-            <img id="resize" src={selectedImg}/>
+            <img id="resize" src={selectedImg} onClick={handleImageClick}/>
             <div className="text">
                 <div className="title">{selectedTitle}</div>
                 <div className="artist">By: {selectedAuthor}</div>
             </div>
+            <audio ref={audioRef} src={selectedAudioLink}></audio>
         </div>
-    )
+    );
 }
-
 
 export default Song;

@@ -5,9 +5,9 @@
 # import json
 from flask import Flask, request, jsonify
 from classify import classify_one, classify_many
-
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app)
 app.app_context().push()
 
 #Sanity check
@@ -23,7 +23,7 @@ def test_classify():
 
     return classify_one(title, author)
 
-@app.route('/classify/many', methods=['POST'])
+@app.route('/classify/many/', methods=['POST'])
 def classify_more():
     songs = request.get_json()
 
