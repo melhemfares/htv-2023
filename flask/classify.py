@@ -4,6 +4,7 @@ from cohere.classify import Example
 from collections import defaultdict
 from flask import jsonify
 from dotenv import load_dotenv
+import requests
 import json
 import os
 
@@ -16,8 +17,16 @@ co = cohere.Client(key)
 genius = Genius(genius_access_token)
     
 def classify_one(title, author):
-    song = genius.search_song(title, author)
-
+    
+    while True:
+        try:
+            song = genius.search_song(title, author)
+            break
+        except requests.exceptions.Timeout:
+            pass
+        except:
+            return jsonify( {"error": "Something unexpected happened. Try again"} )
+        
     lyrics = song.lyrics.split('\n')
     inputs = []
 
@@ -57,8 +66,8 @@ def classify_many(songs):
 
     mood = songs['mood']
     
-    for song in songs['songs'].values():
-        title, author = song
+    for song in songs['songs']:
+        title, author = song['title'], song['author']
 
         res.append(classify_one(title, author))
 
